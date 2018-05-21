@@ -1,0 +1,36 @@
+{
+  "name": "directory-command",
+  "version": "0.0.0",
+  "description": "use directory structure to define commands and subcommands",
+  "main": "index.js",
+  "scripts": {
+    "doc": "documentation build index.js -f md > docs/api.md",
+    "lint": "standard index.js",
+    "test": "node tests/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sethvincent/directory-command.git"
+  },
+  "keywords": [
+    "cli",
+    "command",
+    "commandline"
+  ],
+  "author": "sethvincent <sethvincent@gmail.com> (https://sethvincent.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sethvincent/directory-command/issues"
+  },
+  "homepage": "https://github.com/sethvincent/directory-command#readme",
+  "dependencies": {
+    "cliclopts": "^1.1.1",
+    "folder-walker": "^3.1.0",
+    "minimist": "^1.2.0"
+  },
+  "devDependencies": {
+    "documentation": "^6.3.3",
+    "standard": "^11.0.1",
+    "tape": "^4.9.0"
+  }
+}
