@@ -1,7 +1,7 @@
 {
   "name": "directory-command",
   "version": "0.0.0",
-  "description": "use directory structure to define commands and subcommands",
+  "description": "use directory structure to define commands and subcommands of a command-line tool",
   "main": "index.js",
   "scripts": {
     "doc": "documentation build index.js -f md > docs/api.md",
