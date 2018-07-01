@@ -45,7 +45,7 @@ module.exports = function directoryCommand (directory, args, options, callback) 
     }
 
     if (!commandName) {
-      unmatchedArgs.push(args.pop())
+      unmatchedArgs.unshift(args.pop())
       return match(args, unmatchedArgs)
     }
 
