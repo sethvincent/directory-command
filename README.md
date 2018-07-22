@@ -28,35 +28,33 @@ npm install --save directory-command
 ```js
 #! /usr/bin/env node
 
-var path = require('path')
-var directoryCommand = require('../index')
+const path = require('path')
+const directoryCommand = require('directory-command')
 
-var directory = path.join(__dirname, 'commands')
+const directory = path.join(__dirname, 'commands')
 
-var defaultCommand = {
-  command: function (args, flags, context) {
-    console.log(args, flags, context)
-  },
-  options: []
-}
-
-var options = {
-  defaultCommand
+const options = {
+  context: {}
 }
 
 directoryCommand(directory, process.argv.slice(2), options)
 ```
 
-A command looks like:
+A command file looks like:
 
 ```js
-module.exports = {
-  command: function (args, flags, context) {
-    console.log(args, flags, context)
-  },
-  options: []
+function command (args, flags, context) {
+  console.log(args, flags, context)
 }
+
+const options = []
+
+module.exports = { command, options }
 ```
+
+### Default/root command
+
+The default command is the index.js file of the specified commands directory. See the [basic usage example](examples/basic-usage).
 
 ## Documentation
 - [API](docs/api.md)

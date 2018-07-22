@@ -66,7 +66,12 @@ module.exports = function directoryCommand (directory, args, options, callback) 
       }
 
       var commandString = commandParts.join(' ')
-      commands[commandString] = require(filepath)
+
+      if (relname === 'index.js') {
+        defaultCommand = require(filepath)
+      } else {
+        commands[commandString] = require(filepath)
+      }
     }
   })
 

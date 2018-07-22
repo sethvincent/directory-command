@@ -3,7 +3,7 @@
 var path = require('path')
 var directoryCommand = require('../index')
 
-var directory = path.join(__dirname, '..', 'tests', 'fixtures', 'simple')
+var directory = path.join(__dirname, 'commands')
 
 var defaultCommand = {
   command: function () {},

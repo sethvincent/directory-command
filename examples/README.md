@@ -1,3 +1,3 @@
 # Examples
 
-- [Basic usage](basic-usage.js)
+- [Basic usage](basic-usage/)

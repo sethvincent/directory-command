@@ -1,6 +1,6 @@
 module.exports = {
   command: function (args, flags, context) {
-    context.t.ok(flags.hi === 'huh')
+    console.log('index', args, flags, context)
   },
   options: []
 }
