@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 var path = require('path')
-var directoryCommand = require('../index')
+var directoryCommand = require('../../index')
 
 var directory = path.join(__dirname, 'commands')
 
