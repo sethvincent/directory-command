@@ -46,6 +46,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   directoryCommand(directory, process.argv.slice(2), options)
   ```
 
-[v2.0.0]: https://github.com/sethvincent/directory-command/tree/v1.0.1...v2.0.0
-[v1.0.1]: https://github.com/sethvincent/directory-command/tree/v1.0.0...v1.0.1
-[v1.0.0]: https://github.com/sethvincent/directory-command/tree/v1.0.0
+[v2.0.0]: https://github.com/sethvincent/directory-command/compare/v1.0.1...v2.0.0
+[v1.0.1]: https://github.com/sethvincent/directory-command/compare/v1.0.0...v1.0.1
+[v1.0.0]: https://github.com/sethvincent/directory-command/compare/v1.0.0
