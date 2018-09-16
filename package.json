@@ -24,9 +24,8 @@
   },
   "homepage": "https://github.com/sethvincent/directory-command#readme",
   "dependencies": {
-    "cliclopts": "^1.1.1",
-    "folder-walker": "^3.1.0",
-    "minimist": "^1.2.0"
+    "args-and-flags": "^1.0.0",
+    "folder-walker": "^3.1.0"
   },
   "devDependencies": {
     "documentation": "^6.3.3",
