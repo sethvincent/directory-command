@@ -8,6 +8,25 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - ... _nothing yet_
 
+## [v3.0.0] - 2018-09-16
+
+### Changed
+- split command `options` into `args` and `flags`. Creating a command now looks like:
+  ```js
+  function command (args, flags, context) {
+    
+  }
+  
+  const args = []
+  const flags = []
+  
+  module.exports = { command, args, flags }
+  ```
+
+### Removed
+- removed `callback` argument from `directoryCommand`
+- removed `defaultCommand` option from `directoryCommand` - now the root index.js file in the commands directory is the only way to create a command that runs by default if no other commands match.
+
 ## [v2.0.0] - 2018-07-22
 
 ### Changed
@@ -46,6 +65,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   directoryCommand(directory, process.argv.slice(2), options)
   ```
 
+[v3.0.0]: https://github.com/sethvincent/directory-command/compare/v2.0.0...v3.0.0
 [v2.0.0]: https://github.com/sethvincent/directory-command/compare/v1.0.1...v2.0.0
 [v1.0.1]: https://github.com/sethvincent/directory-command/compare/v1.0.0...v1.0.1
 [v1.0.0]: https://github.com/sethvincent/directory-command/compare/v1.0.0

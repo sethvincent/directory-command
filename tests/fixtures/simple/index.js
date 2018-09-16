@@ -1,6 +1,20 @@
 module.exports = {
   command: function (args, flags, context) {
-    context.t.ok(flags.hi === 'huh')
+    if (args.d) {
+      context.t.ok(flags.default === 'huh')
+    } else {
+      context.t.ok(flags.hi === 'huh')
+    }
   },
-  options: []
+  args: [
+    {
+      name: 'd'
+    }
+  ],
+  flags: [
+    {
+      name: 'hi',
+      type: 'string'
+    }
+  ]
 }

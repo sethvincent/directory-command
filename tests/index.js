@@ -12,15 +12,10 @@ test('simple usage', function (t) {
     }
   }
 
-  directoryCommand(directory, ['a', '--hi', 'huh'], options, (a, b, c) => {
-    directoryCommand(directory, ['b', '--hi', 'huh'], options, (a, b, c) => {
-      directoryCommand(directory, ['b c', '--hi', 'huh'], options, (a, b, c) => {
-        directoryCommand(directory, ['', '--hi', 'huh'], options, (a, b, c) => {
-          directoryCommand(directory, ['d', '--hi', 'huh'], options, (a, b, c) => {
-            t.end()
-          })
-        })
-      })
-    })
-  })
+  directoryCommand(directory, ['a', '--hi', 'huh'], options)
+  directoryCommand(directory, ['b', '--hi', 'huh'], options)
+  directoryCommand(directory, ['b c', '--hi', 'huh'], options)
+  directoryCommand(directory, ['', '--hi', 'huh'], options)
+  directoryCommand(directory, ['d', '--default', 'huh'], options)
+  t.end()
 })

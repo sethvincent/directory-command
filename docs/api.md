@@ -11,11 +11,10 @@ Create a commandline router with nested commands based on a directory/file struc
 **Parameters**
 
 -   `directory` **[string][2]** the directory with subdirectories and files that define the commands
--   `args` **[array][3]** array of arguments, like process.argv.slice(2)
+-   `argsInput` **[array][3]** array of arguments, like process.argv.slice(2)
 -   `options` **[object][4]?** optional options object
     -   `options.context` **[object][4]?** context object that will be passed to every command
-    -   `options.defaultCommand` **[object][4]?** default command that is called if no matching command is found
--   `callback` **[function][5]?** optional callback function that is called when the command is complete
+    -   `options.defaults` **[array][3]?** default values for arguments
 
 [1]: #directorycommand
 
@@ -24,5 +23,3 @@ Create a commandline router with nested commands based on a directory/file struc
 [3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
 [4]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
-
-[5]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function

@@ -1,42 +1,43 @@
-var walker = require('folder-walker')
-var minimist = require('minimist')
-var cliclopts = require('cliclopts')
-
-function noop () {}
+const path = require('path')
+const walker = require('folder-walker')
+const ArgsAndFlags = require('args-and-flags')
 
 /**
 * Create a commandline router with nested commands based on a directory/file structure
 *
 * @name directoryCommand
 * @param {string} directory - the directory with subdirectories and files that define the commands
-* @param {array} args - array of arguments, like process.argv.slice(2)
+* @param {array} argsInput - array of arguments, like process.argv.slice(2)
 * @param {object} [options] - optional options object
 * @param {object} [options.context] - context object that will be passed to every command
-* @param {object} [options.defaultCommand] - default command that is called if no matching command is found
-* @param {function} [callback] - optional callback function that is called when the command is complete
 */
-module.exports = function directoryCommand (directory, args, options, callback) {
-  if (typeof options === 'function') {
-    callback = options
+module.exports = function directoryCommand (directory, argsInput, options) {
+  if (!options) {
     options = {}
   }
 
-  var commands = {}
-  var context = options.context || {}
-  var defaultCommand = options.defaultCommand || noop
+  const commands = {}
+  const context = options.context || {}
+  let defaultCommand
 
-  function runCommand (commandObject, args) {
-    var { command, options } = commandObject
-    var cliOptions = cliclopts(options)
-    var argv = minimist(args, cliOptions.options())
-    return command(argv._, argv, context)
+  function runCommand (commandObject, argsInput) {
+    const command = commandObject.command
+
+    const parser = new ArgsAndFlags({
+      args: commandObject.args,
+      flags: commandObject.flags
+    })
+
+    const { args, flags } = parser.parse(argsInput)
+    context.help = parser.help()
+    return command(args, flags, context)
   }
 
   function match (args, unmatchedArgs) {
     if (!unmatchedArgs) unmatchedArgs = []
-    var commandStrings = Object.keys(commands)
+    const commandStrings = Object.keys(commands)
 
-    var commandName = commandStrings.find((commandString) => {
+    const commandName = commandStrings.find((commandString) => {
       return commandString === args.join(' ')
     })
 
@@ -46,26 +47,26 @@ module.exports = function directoryCommand (directory, args, options, callback) 
 
     if (!commandName) {
       unmatchedArgs.unshift(args.pop())
-      return match(args, unmatchedArgs)
+      return match(argsInput, unmatchedArgs)
     }
 
     return runCommand(commands[commandName], unmatchedArgs)
   }
 
-  var stream = walker(directory, options)
+  const stream = walker(directory)
 
   stream.on('data', (data) => {
-    if (data.type === 'file') {
-      var { relname, filepath } = data
-      var commandParts = relname.split('/')
-      var finalCommand = commandParts.length - 1
+    if (data.type === 'file' && path.extname(data.relname) === '.js') {
+      const { relname, filepath } = data
+      const commandParts = relname.split('/')
+      const finalCommand = commandParts.length - 1
       commandParts[finalCommand] = commandParts[finalCommand].split('.')[0]
 
       if (commandParts[finalCommand] === 'index') {
         commandParts.pop()
       }
 
-      var commandString = commandParts.join(' ')
+      const commandString = commandParts.join(' ')
 
       if (relname === 'index.js') {
         defaultCommand = require(filepath)
@@ -76,7 +77,6 @@ module.exports = function directoryCommand (directory, args, options, callback) 
   })
 
   stream.on('end', () => {
-    var result = match(args)
-    if (callback) callback(null, result)
+    match(argsInput)
   })
 }
