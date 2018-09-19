@@ -47,9 +47,10 @@ function command (args, flags, context) {
   console.log(args, flags, context)
 }
 
-const options = []
+const args = []
+const flags = []
 
-module.exports = { command, options }
+module.exports = { command, args, flags }
 ```
 
 ### Default/root command
