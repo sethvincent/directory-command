@@ -8,6 +8,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - ... _nothing yet_
 
+## [v3.1.0] - 2018-10-10
+
+### Added
+
+- support integers as validation type by bumping args-and-flags to v1.1.0
+
+## [v3.0.1] - 2018-09-18
+
+### Fixed
+- fixed example in readme
+
 ## [v3.0.0] - 2018-09-16
 
 ### Changed
