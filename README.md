@@ -62,7 +62,7 @@ The default command is the index.js file of the specified commands directory. Se
 - [Tests](tests/)
 
 ### Examples
-- [Basic example](examples/basic-usage.js)
+- [Basic example](examples/basic-usage)
 
 ## Contributing
 
