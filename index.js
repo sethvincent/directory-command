@@ -13,12 +13,19 @@ const pump = require('pump')
 * @name directoryCommand
 * @param {string} directory - the directory with subdirectories and files that define the commands
 * @param {array} argsInput - array of arguments, like process.argv.slice(2)
-* @param {object} [config] - optional options object
+* @param {object} config - options object
+* @param {string} config.commandName - base command name of the cli tool
+* @param {integer} [config.leftColumnWidth] - width in pixels of the left column of help text
+* @param {integer} [config.rightColumnWidth] - width in pixels of the right column of help text
 * @param {object} [config.context] - context object that will be passed to every command
 **/
 module.exports = function directoryCommand (directory, argsInput, config) {
   if (!config) {
-    config = {}
+    throw new Error('config object is required as the 3rd argument')
+  }
+
+  if (!config.commandName) {
+    throw new Error('config.commandName string is required')
   }
 
   const context = config.context || {}
@@ -55,10 +62,19 @@ module.exports = function directoryCommand (directory, argsInput, config) {
 
   function runCommand (commandObject, argsInput, subcommands) {
     const { command, parser, help } = commandObject
+
+    if (argsInput.includes('--help') || argsInput.includes('-h')) {
+      return renderHelp(commandObject, subcommands)
+    }
+
     const { args, flags } = parser.parse(argsInput)
 
     if (config.autoHelp && flags.help) {
       return renderHelp(commandObject, subcommands)
+    }
+
+    context.help = function () {
+      renderHelp(commandObject, subcommands)
     }
 
     return command(args, flags, Object.assign({ help }, context))
@@ -88,7 +104,7 @@ module.exports = function directoryCommand (directory, argsInput, config) {
     console.log('Usage:')
     renderUsage(commandName, commandObject)
 
-    if (help) {
+    if (help.trim().length) {
       console.log(help)
     }
 

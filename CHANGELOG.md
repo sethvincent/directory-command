@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 - _nothing yet ..._
 
+## [v4.0.0] - 2018-10-28
+
+### Changed
+- `config` and `config.commandName` are now required in `directoryCommand()`
+
+### Added
+- new `directory-command` cli tool for quickly creating new cli tools
+- `leftColumnWidth` and `rightColumnWidth` for controlling the width of left and right columns of help output
+
 ## [v3.2.0] - 2018-10-27
 
 ### Added
@@ -80,6 +89,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   directoryCommand(directory, process.argv.slice(2), options)
   ```
 
+[v4.0.0]: https://github.com/sethvincent/directory-command/compare/v3.2.0...v4.0.0
 [v3.2.0]: https://github.com/sethvincent/directory-command/compare/v3.1.0...v3.2.0
 [v3.1.0]: https://github.com/sethvincent/directory-command/compare/v3.0.1...v3.1.0
 [v3.0.1]: https://github.com/sethvincent/directory-command/compare/v3.0.0...v3.0.1

@@ -13,7 +13,10 @@ Create a commandline router with nested commands based on a directory/file struc
 
 -   `directory` **[string][3]** the directory with subdirectories and files that define the commands
 -   `argsInput` **[array][4]** array of arguments, like process.argv.slice(2)
--   `config` **[object][5]?** optional options object
+-   `config` **[object][5]** options object
+    -   `config.commandName` **[string][3]** base command name of the cli tool
+    -   `config.leftColumnWidth` **integer?** width in pixels of the left column of help text
+    -   `config.rightColumnWidth` **integer?** width in pixels of the right column of help text
     -   `config.context` **[object][5]?** context object that will be passed to every command
         \*
 

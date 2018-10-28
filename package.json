@@ -3,6 +3,9 @@
   "version": "3.2.0",
   "description": "use directory structure to define commands and subcommands of a command-line tool",
   "main": "index.js",
+  "bin": {
+    "directory-command": "bin/index.js"
+  },
   "scripts": {
     "doc": "documentation build index.js -f md > docs/api.md",
     "lint": "standard index.js",
@@ -26,6 +29,8 @@
   "dependencies": {
     "args-and-flags": "^2.0.0",
     "folder-walker": "^3.2.0",
+    "handlebars": "^4.0.12",
+    "mkdirp": "^0.5.1",
     "obj-keypath": "^1.1.0",
     "pump": "^3.0.0",
     "through2": "^2.0.3",
