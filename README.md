@@ -1,4 +1,4 @@
-<img src="docs/directory-command.svg" width=150>
+<img src="docs/directory-command.png" width=150>
 
 # directory-command
 
