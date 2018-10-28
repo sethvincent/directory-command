@@ -192,6 +192,40 @@ const flags = [
 module.exports = { command, args, flags}
 ```
 
+### Creating subcommands
+
+Subcommands can be nested as deeply as needed.
+
+A file placed either at:
+
+```console
+bin/commands/new/index.js
+```
+
+or:
+
+```console
+bin/commands/new.js
+```
+
+can be called with:
+
+```console
+example-cli new
+```
+
+A file placed at:
+
+```console
+bin/commands/new/example.js
+```
+
+can be called with:
+
+```console
+example-cli new example
+```
+
 ### Default/root command
 
 The default command is the index.js file of the specified commands directory. See the [basic usage example](examples/basic-usage).
