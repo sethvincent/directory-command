@@ -27,7 +27,7 @@ Create a command-line tool using directory structure to define nested subcommand
 ## Install
 
 ```sh
-npm install --save directory-command
+npm install directory-command
 ```
 
 ## Setup
@@ -41,6 +41,8 @@ With `npx`:
 ```console
 npx directory-command new --name example-cli
 ```
+
+Installing globally:
 
 ```console
 npm i -g directory-command
@@ -58,6 +60,10 @@ mkdir bin
 ```
 
 #### Create bin/index.js
+
+```console
+touch bin/index.js
+```
 
 ```js
 #! /usr/bin/env node
@@ -77,7 +83,6 @@ directoryCommand(directory, process.argv.slice(2), {
 ```console
 mkdir bin/commands
 ```
-
 
 #### Create a command
 
@@ -104,9 +109,7 @@ module.exports = { command, args, flags }
 
 ### Args
 
-With `directory-command`, "args" are the options that you pass in without flags, the bits of text that start with `--` or `-`.
-
-The order of args matters. The order that you define them in the `args` array of a command is the order they need to be placed when using a cli tool.
+Args are options that are identified by their position. The order of args matters. The order that you define them in the `args` array of a command is the order they need to be placed when using the cli tool.
 
 Here's an example definition of an arg:
 
@@ -144,7 +147,7 @@ module.exports = { command, args, flags}
 
 ### Flags
 
-Unlinke args, the order that they are defined in does not matter, and they can be placed in any order when using a cli tool.
+Unlike args, the order that they are defined in does not matter, and they can be placed in any order when using a cli tool.
 
 An example flag definition:
 
@@ -167,7 +170,7 @@ example-cli --type-of-day awesome
 We set an alias for the flag, so we can use that instead:
 
 ```console
-example-cli --d awesome
+example-cli -d awesome
 ```
 
 Here's how you use the `type-of-day` flag in your command:
