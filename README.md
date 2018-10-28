@@ -1,4 +1,6 @@
-<h1><img src="docs/directory-command.svg" width=50 style="vertical-align:bottom"> directory-command</h1>
+<img src="docs/directory-command.svg" width=150>
+
+## directory-command
 
 [![npm][npm-image]][npm-url]
 [![travis][travis-image]][travis-url]
