@@ -5,4 +5,9 @@ const directoryCommand = require('../../index')
 
 const directory = path.join(__dirname, 'commands')
 
-directoryCommand(directory, process.argv.slice(2))
+const options = {
+  commandName: 'example',
+  context: {}
+}
+
+directoryCommand(directory, process.argv.slice(2), options)

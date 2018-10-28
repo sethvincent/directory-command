@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
-- ... _nothing yet_
+### Added
+- refactored to enable automatic help rendering when the `--help` flag is used
 
 ## [v3.1.0] - 2018-10-10
 
@@ -76,6 +77,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   directoryCommand(directory, process.argv.slice(2), options)
   ```
 
+[v3.1.0]: https://github.com/sethvincent/directory-command/compare/v3.0.1...v3.1.0
+[v3.0.1]: https://github.com/sethvincent/directory-command/compare/v3.0.0...v3.0.1
 [v3.0.0]: https://github.com/sethvincent/directory-command/compare/v2.0.0...v3.0.0
 [v2.0.0]: https://github.com/sethvincent/directory-command/compare/v1.0.1...v2.0.0
 [v1.0.1]: https://github.com/sethvincent/directory-command/compare/v1.0.0...v1.0.1

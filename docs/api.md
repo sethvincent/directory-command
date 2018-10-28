@@ -3,23 +3,26 @@
 ### Table of Contents
 
 -   [directoryCommand][1]
+    -   [Parameters][2]
 
 ## directoryCommand
 
 Create a commandline router with nested commands based on a directory/file structure
 
-**Parameters**
+### Parameters
 
--   `directory` **[string][2]** the directory with subdirectories and files that define the commands
--   `argsInput` **[array][3]** array of arguments, like process.argv.slice(2)
--   `options` **[object][4]?** optional options object
-    -   `options.context` **[object][4]?** context object that will be passed to every command
-    -   `options.defaults` **[array][3]?** default values for arguments
+-   `directory` **[string][3]** the directory with subdirectories and files that define the commands
+-   `argsInput` **[array][4]** array of arguments, like process.argv.slice(2)
+-   `config` **[object][5]?** optional options object
+    -   `config.context` **[object][5]?** context object that will be passed to every command
+        \*
 
 [1]: #directorycommand
 
-[2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[2]: #parameters
 
-[3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[4]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[4]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+
+[5]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
