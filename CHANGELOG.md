@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+- _nothing yet ..._
+
+## [v3.2.0] - 2018-10-27
 
 ### Added
 - refactored to enable automatic help rendering when the `--help` flag is used
@@ -77,6 +80,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   directoryCommand(directory, process.argv.slice(2), options)
   ```
 
+[v3.2.0]: https://github.com/sethvincent/directory-command/compare/v3.1.0...v3.2.0
 [v3.1.0]: https://github.com/sethvincent/directory-command/compare/v3.0.1...v3.1.0
 [v3.0.1]: https://github.com/sethvincent/directory-command/compare/v3.0.0...v3.0.1
 [v3.0.0]: https://github.com/sethvincent/directory-command/compare/v2.0.0...v3.0.0
