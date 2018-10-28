@@ -1,6 +1,6 @@
 {
   "name": "directory-command",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "use directory structure to define commands and subcommands of a command-line tool",
   "main": "index.js",
   "bin": {
