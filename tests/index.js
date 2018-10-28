@@ -7,6 +7,7 @@ test('simple usage', function (t) {
   const directory = path.join(__dirname, 'fixtures', 'simple')
 
   const options = {
+    commandName: 'test',
     context: {
       t: t
     }
