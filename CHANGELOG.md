@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 - _nothing yet ..._
 
+## [v4.0.1] - 2018-10-28
+### Fixed
+- docs fix
+
 ## [v4.0.0] - 2018-10-28
 
 ### Changed
@@ -89,6 +93,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   directoryCommand(directory, process.argv.slice(2), options)
   ```
 
+[v4.0.1]: https://github.com/sethvincent/directory-command/compare/v4.0.0...v4.0.1
 [v4.0.0]: https://github.com/sethvincent/directory-command/compare/v3.2.0...v4.0.0
 [v3.2.0]: https://github.com/sethvincent/directory-command/compare/v3.1.0...v3.2.0
 [v3.1.0]: https://github.com/sethvincent/directory-command/compare/v3.0.1...v3.1.0
