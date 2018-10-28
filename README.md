@@ -1,6 +1,6 @@
 <img src="docs/directory-command.svg" width=150>
 
-## directory-command
+# directory-command
 
 [![npm][npm-image]][npm-url]
 [![travis][travis-image]][travis-url]
