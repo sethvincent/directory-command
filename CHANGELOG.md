@@ -7,6 +7,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 - _nothing yet ..._
 
+## [v4.1.0] - 2018-11-17
+### Fixed
+- better error handling when a command has an error
+
+### Added
+- add an example command with better examples when creating a new command with `directory-command new`
+
 ## [v4.0.1] - 2018-10-28
 ### Fixed
 - docs fix
@@ -93,6 +100,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   directoryCommand(directory, process.argv.slice(2), options)
   ```
 
+[v4.1.0]: https://github.com/sethvincent/directory-command/compare/v4.0.1...v4.1.0
 [v4.0.1]: https://github.com/sethvincent/directory-command/compare/v4.0.0...v4.0.1
 [v4.0.0]: https://github.com/sethvincent/directory-command/compare/v3.2.0...v4.0.0
 [v3.2.0]: https://github.com/sethvincent/directory-command/compare/v3.1.0...v3.2.0

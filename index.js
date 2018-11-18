@@ -201,8 +201,9 @@ module.exports = function directoryCommand (directory, argsInput, config) {
     try {
       command.cmd = require(data.filepath)
     } catch (err) {
-      if (!err.message.indexOf('Cannot find module') === 0) {
-        return next(err)
+      if (err && !(err.message.indexOf('Cannot find module') === 0)) {
+        console.error(`${err.name} in command ${data.relname}\n`)
+        return console.error(err)
       } else {
         command.cmd.name = commandParts.join(' ')
         keypath.set(commands, commandParts, command)

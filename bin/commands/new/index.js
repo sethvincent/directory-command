@@ -16,15 +16,20 @@ function command (args, flags, context) {
   const cmdTemplate = readTemplate('command.js')
   const cmdFilepath = path.join(commandsDirectory, 'index.js')
 
+  const cmdExampleTemplate = readTemplate('example-command.js')
+  const cmdExampleFilepath = path.join(commandsDirectory, 'example.js')
+
   const cliContent = cliTemplate({
     commandName: flags.name,
     commandsDirectory: flags['commands-directory']
   })
 
   const cmdContent = cmdTemplate()
+  const cmdExampleContent = cmdExampleTemplate({ commandName: flags.name })
 
   fs.writeFileSync(cliFilepath, cliContent)
   fs.writeFileSync(cmdFilepath, cmdContent)
+  fs.writeFileSync(cmdExampleFilepath, cmdExampleContent)
 }
 
 const args = [
@@ -34,6 +39,7 @@ const args = [
     description: 'Set the directory for the new command-line tool'
   }
 ]
+
 const flags = [
   {
     name: 'name',
