@@ -33,7 +33,7 @@
     "mkdirp": "^0.5.1",
     "obj-keypath": "^1.1.0",
     "pump": "^3.0.0",
-    "through2": "^2.0.3",
+    "through2": "^3.0.0",
     "word-wrap": "^1.2.3",
     "wrap-ansi": "^4.0.0"
   },
