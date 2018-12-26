@@ -145,6 +145,10 @@ const flags = []
 module.exports = { command, args, flags}
 ```
 
+#### Accessing all args as an array
+
+To get all arg values as an array in their original order, use `args._`. This array will not include flags, only the values of args as they've been entered on the command line.
+
 ### Flags
 
 Unlike args, the order that they are defined in does not matter, and they can be placed in any order when using a cli tool.
@@ -154,7 +158,7 @@ An example flag definition:
 ```js
 {
   name: 'type-of-day',
-  alias: 'day'
+  alias: ['d', 'day'],
   type: 'string',
   description: 'An arg example for saying what kind of day it is'
 }
@@ -173,6 +177,8 @@ We set an alias for the flag, so we can use that instead:
 example-cli -d awesome
 ```
 
+Note that the `alias` property can be a string with one alias, or an array with multiple strings as shown here. This applies to both args and flags.
+
 Here's how you use the `type-of-day` flag in your command:
 
 ```js
@@ -184,7 +190,7 @@ const args = []
 const flags = [
   {
     name: 'type-of-day',
-    alias: 'd'
+    alias: ['d', 'day'],
     type: 'string',
     description: 'An arg example for saying what kind of day it is'
   }

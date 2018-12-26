@@ -6,6 +6,7 @@ module.exports = {
 
     if (flags.h) {
       context.t.ok(flags.hi === 'huh')
+      context.t.ok(flags.hello === 'huh')
     }
   },
   args: [
@@ -16,7 +17,7 @@ module.exports = {
   flags: [
     {
       name: 'hi',
-      alias: 'h',
+      alias: ['h', 'hello'],
       type: 'string'
     }
   ]
