@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/sethvincent/directory-command#readme",
   "dependencies": {
-    "args-and-flags": "^2.0.0",
+    "args-and-flags": "^2.1.0",
     "folder-walker": "^3.2.0",
     "handlebars": "^4.0.12",
     "mkdirp": "^0.5.1",
@@ -38,7 +38,7 @@
     "wrap-ansi": "^4.0.0"
   },
   "devDependencies": {
-    "documentation": "^8.1.2",
+    "documentation": "^9.1.1",
     "standard": "^12.0.1",
     "tape": "^4.9.1"
   }
