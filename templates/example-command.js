@@ -21,7 +21,7 @@ const flags = [
   }
 ]
 
-const options: {
+const options = {
   description: 'An example command',
   longDescription: 'This command demonstrates some of the basic features of directory-command',
   examples: [
