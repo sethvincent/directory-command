@@ -5,7 +5,7 @@ function command (args, flags, context) {
 const args = []
 const flags = []
 
-const options: {
+const options = {
   description: '',
   longDescription: '',
   examples: []
