@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 - _nothing yet ..._
 
+## [v4.2.1] - 2019-08-11
+### Fixed
+- fix base templates
+
 ## [v4.2.0] - 2018-12-26
 ### Added
 - updated args-and-flags dependency to allow accessing all arg values via `args._`
@@ -108,6 +112,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   directoryCommand(directory, process.argv.slice(2), options)
   ```
 
+[v4.2.1]: https://github.com/sethvincent/directory-command/compare/v4.2.0...v4.2.1
 [v4.2.0]: https://github.com/sethvincent/directory-command/compare/v4.1.1...v4.2.0
 [v4.1.1]: https://github.com/sethvincent/directory-command/compare/v4.1.0...v4.1.1
 [v4.1.0]: https://github.com/sethvincent/directory-command/compare/v4.0.1...v4.1.0
