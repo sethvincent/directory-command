@@ -30,6 +30,10 @@ Create a command-line tool using directory structure to define nested subcommand
 npm install directory-command
 ```
 
+## Node version support
+
+This module requires node version >=8.
+
 ## Setup
 
 `directory-command` is designed to make setup as quick as possible.
