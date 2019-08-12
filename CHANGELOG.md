@@ -7,6 +7,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 - _nothing yet ..._
 
+## [v4.3.0] - 2019-08-11
+### Added
+- allow synchronous functions to values for arg & flag default values
+
+### Fixed
+- improved error handling for case when a command requires a module that doesn't exist closed [#3](https://github.com/sethvincent/directory-command/issues/3)
+
 ## [v4.2.1] - 2019-08-11
 ### Fixed
 - fix base templates
@@ -112,6 +119,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   directoryCommand(directory, process.argv.slice(2), options)
   ```
 
+[v4.3.0]: https://github.com/sethvincent/directory-command/compare/v4.2.1...v4.3.0
 [v4.2.1]: https://github.com/sethvincent/directory-command/compare/v4.2.0...v4.2.1
 [v4.2.0]: https://github.com/sethvincent/directory-command/compare/v4.1.1...v4.2.0
 [v4.1.1]: https://github.com/sethvincent/directory-command/compare/v4.1.0...v4.1.1
