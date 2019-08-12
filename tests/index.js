@@ -51,7 +51,7 @@ test('missing module', function (t) {
   }
 
   directoryCommand(directory, [], options, (err) => {
-    t.ok(err.message === 'Cannot find module \'./does-not-exist\'')
+    t.ok(err.message.includes('Cannot find module \'./does-not-exist\''))
     t.end()
   })
 })
