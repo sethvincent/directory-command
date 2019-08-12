@@ -18,7 +18,8 @@ Create a commandline router with nested commands based on a directory/file struc
     -   `config.leftColumnWidth` **integer?** width in pixels of the left column of help text
     -   `config.rightColumnWidth` **integer?** width in pixels of the right column of help text
     -   `config.context` **[object][5]?** context object that will be passed to every command
-        \*
+-   `onError` **[function][6]?** optional callback function that is called if directoryCommand encounters an error
+    if onError is not provided, the error will be thrown
 
 [1]: #directorycommand
 
@@ -29,3 +30,5 @@ Create a commandline router with nested commands based on a directory/file struc
 [4]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
 [5]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+
+[6]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function

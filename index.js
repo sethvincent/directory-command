@@ -18,8 +18,10 @@ const pump = require('pump')
 * @param {integer} [config.leftColumnWidth] - width in pixels of the left column of help text
 * @param {integer} [config.rightColumnWidth] - width in pixels of the right column of help text
 * @param {object} [config.context] - context object that will be passed to every command
-**/
-module.exports = function directoryCommand (directory, argsInput, config) {
+* @param {function} [onError] - optional callback function that is called if directoryCommand encounters an error
+* if onError is not provided, the error will be thrown
+*/
+module.exports = function directoryCommand (directory, argsInput, config, onError) {
   if (!config) {
     throw new Error('config object is required as the 3rd argument')
   }
@@ -201,9 +203,10 @@ module.exports = function directoryCommand (directory, argsInput, config) {
     try {
       command.cmd = require(data.filepath)
     } catch (err) {
-      if (err && !(err.message.indexOf('Cannot find module') === 0)) {
-        console.error(`${err.name} in command ${data.relname}\n`)
-        return console.error(err)
+      const filepathBasename = path.basename(data.filepath)
+
+      if (err && filepathBasename !== commandParts[finalCommand]) {
+        return next(err)
       } else {
         command.cmd.name = commandParts.join(' ')
         keypath.set(commands, commandParts, command)
@@ -244,6 +247,9 @@ module.exports = function directoryCommand (directory, argsInput, config) {
   }
 
   pump(walker(directory), through.obj(each, end), (err) => {
-    if (err) console.error(err)
+    if (err) {
+      if (onError) return onError(err)
+      throw err
+    }
   })
 }

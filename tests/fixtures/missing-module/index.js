@@ -1,13 +1,8 @@
+const doesNotExist = require('./does-not-exist')
+
 module.exports = {
   command: function (args, flags, context) {
-    if (args.demo) {
-      context.t.ok(flags.demo === 'huh')
-    }
-
-    if (flags.h) {
-      context.t.ok(flags.hi === 'huh')
-      context.t.ok(flags.hello === 'huh')
-    }
+    console.log('huh', args, flags)
   },
   args: [
     {
