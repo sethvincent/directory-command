@@ -32,8 +32,9 @@ module.exports = function directoryCommand (directory, argsInput, config, onErro
 
   const context = config.context || {}
   const commandName = config.commandName
-  const leftColumnWidth = config.leftColumnWidth || 40
-  const rightColumnWidth = config.rightColumnWidth || 40
+  let leftColumnWidth = config.leftColumnWidth || process.stdout.columns / 2
+  let rightColumnWidth = config.rightColumnWidth || process.stdout.columns / 2
+  const gutter = config.gutter || 4
   const commands = {}
 
   if (config.autoHelp !== false) {
@@ -71,7 +72,7 @@ module.exports = function directoryCommand (directory, argsInput, config, onErro
 
     const { args, flags } = parser.parse(argsInput)
 
-    if (config.autoHelp && flags.help) {
+    if (config.autoHelp) {
       return renderHelp(commandObject, subcommands)
     }
 
@@ -91,7 +92,7 @@ module.exports = function directoryCommand (directory, argsInput, config, onErro
   }
 
   function renderHelp (commandObject, subcommands) {
-    const { help, longDescription, description, docsUrl } = commandObject
+    const { help, longDescription, description, docsUrl, parser } = commandObject
 
     console.log(logName(commandName, commandObject), '\n')
 
@@ -114,7 +115,7 @@ module.exports = function directoryCommand (directory, argsInput, config, onErro
       console.log('\nExamples:')
       commandObject.examples.forEach((example) => {
         const line = `  ${example.cmd}`
-        const description = logDescription(example.description)
+        const description = parser.formatDescription(example.description)
         console.log(`${line}${logSpaces(line.length)}${description}`)
       })
     }
@@ -142,13 +143,15 @@ module.exports = function directoryCommand (directory, argsInput, config, onErro
     }
   }
 
-  function logDescription (text) {
+  function formatDescription (text) {
     if (!text) return ''
-    if (text.length > rightColumnWidth) {
-      const lines = wordWrap(text, { width: rightColumnWidth }).split(/\r?\n/).map((line, i) => {
+
+    if (text.length > rightColumnWidth - gutter) {
+      const lines = wrap(text, rightColumnWidth - gutter, {  }).split(/\r?\n/).map((line, i) => {
         if (i === 0) return line.trim()
-        return ' '.repeat(leftColumnWidth) + line.trim()
+        return ' '.repeat(leftColumnWidth + gutter) + line.trim()
       })
+
       return lines.join('\n')
     }
     return text
@@ -161,6 +164,9 @@ module.exports = function directoryCommand (directory, argsInput, config, onErro
 
   function renderUsage (rootName, cmd, subcommands) {
     const subcommandKeys = Object.keys(subcommands || {})
+    const {
+      parser
+    } = cmd
 
     function logCommands () {
       if (!subcommandKeys.length) return ''
@@ -168,7 +174,7 @@ module.exports = function directoryCommand (directory, argsInput, config, onErro
     }
 
     const line = `  ${logName(rootName, cmd)}${logCommands()}`
-    const description = cmd && cmd.description ? logDescription(cmd.description) : ''
+    const description = cmd && cmd.description ? parser.formatDescription(cmd.description) : ''
     console.log(`${line}${logSpaces(line.length)}${description}`)
 
     if (!subcommands || !subcommandKeys.length) return
@@ -216,11 +222,11 @@ module.exports = function directoryCommand (directory, argsInput, config, onErro
 
     const options = command.cmd.options || {}
     command.cmd.parser = new ArgsAndFlags(command.cmd)
-    command.cmd.help = command.cmd.parser.help({
+    command.cmd.help = `\n` + command.cmd.parser.help({
       argsHeaderText: 'Args:',
       flagsHeaderText: 'Flags:',
-      leftColumnWidth,
-      rightColumnWidth
+      // leftColumnWidth,
+      // rightColumnWidth
     })
 
     command.cmd.name = commandParts.join(' ')
