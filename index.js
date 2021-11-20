@@ -48,6 +48,10 @@ async function runCommand (config) {
 		return renderHelp(command, config)
 	}
 
+	context.help = function () {
+		renderHelp(command, config)
+	}
+
 	return command.command(args, flags, context)
 }
 
@@ -117,6 +121,14 @@ function findCommand (args, commands, unusedArgs = []) {
 
 		if (!commandArgs.length) {
       // root command key is an empty string
+			commands[''].subcommands = Object.keys(commands).reduce((obj, key) => {
+				if (key.length) {
+					obj[key] = commands[key]
+				}
+
+				return obj
+			}, {})
+			commands[''].unusedArgs = unusedArgs
 			return commands['']
 		}
 
