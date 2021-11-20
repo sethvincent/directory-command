@@ -3,14 +3,11 @@
 # directory-command
 
 [![npm][npm-image]][npm-url]
-[![travis][travis-image]][travis-url]
 [![standard][standard-image]][standard-url]
 [![conduct][conduct]][conduct-url]
 
 [npm-image]: https://img.shields.io/npm/v/directory-command.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/directory-command
-[travis-image]: https://img.shields.io/travis/sethvincent/directory-command.svg?style=flat-square
-[travis-url]: https://travis-ci.org/sethvincent/directory-command
 [standard-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
 [standard-url]: http://npm.im/standard
 [conduct]: https://img.shields.io/badge/code%20of%20conduct-contributor%20covenant-green.svg?style=flat-square
@@ -20,8 +17,8 @@
 
 Create a command-line tool using directory structure to define nested subcommands.
 
-- **Intuitive:** Creating new commands is fast and straightforward
-- **Helpful:** Automatically creates help text that is displayed when a user passes the `--help` flag
+- **Intuitive:** Creating nested commands is fast and straightforward
+- **Helpful:** Automatically prints help text that is displayed when a user passes the `--help` flag
 - **Meticulous:** Separates args and flags making them easy to use, and validates the values that are provided
 
 ## Install
@@ -32,7 +29,7 @@ npm install directory-command
 
 ## Node version support
 
-This module requires node version >=8.
+This module requires node version >=14.13.0.
 
 ## Setup
 
@@ -53,7 +50,7 @@ npm i -g directory-command
 directory-command new --name example-cli
 ```
 
-Make sure to add `directory-command` to your project dependencies.
+Make sure to add `directory-command` to your project dependencies with `npm i directory-command`.
 
 ### Manual setup
 
@@ -72,14 +69,26 @@ touch bin/index.js
 ```js
 #! /usr/bin/env node
 
-const path = require('path')
-const directoryCommand = require('directory-command')
+import { dirname, join } from 'path'
+import { fileURLToPath } from 'url'
+import directoryCommand from 'directory-command'
 
-const directory = path.join(__dirname, 'commands')
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const directory = join(__dirname, 'commands')
 
-directoryCommand(directory, process.argv.slice(2), {
-  commandName: 'example'
-})
+const config = {
+  commandName: 'example-cli',
+  directory,
+  argv: process.argv.slice(2),
+  context: {}
+}
+
+try {
+  directoryCommand(config)
+} catch (err) {
+  console.error(err)
+}
+
 ```
 
 #### Create a bin/commands directory
@@ -97,18 +106,16 @@ touch bin/commands/index.js
 A command file looks like:
 
 ```js
-function command (args, flags, context) {
+export async function command (args, flags, context) {
   console.log(args, flags, context)
 }
 
-const args = []
-const flags = []
+export const args = []
+export const flags = []
 
-const options = {
+export const options = {
   description: 'example command'
 }
-
-module.exports = { command, args, flags }
 ```
 
 ### Args
@@ -134,19 +141,18 @@ example-cli hi
 Here's how you use the `hello` arg in your command:
 
 ```js
-function command (args, flags, context) {
+export function command (args, flags, context) {
   console.log(args.hello) // logs `hi`
 }
 
-const args = [
+export const args = [
   {
     name: 'hello',
     type: 'string',
     description: 'An arg example for saying hello'
   }
 ]
-const flags = []
-module.exports = { command, args, flags}
+export const flags = []
 ```
 
 #### Accessing all args as an array
@@ -168,7 +174,6 @@ An example flag definition:
 }
 ```
 
-
 Here's how it looks when you use the flag:
 
 ```console
@@ -186,12 +191,12 @@ Note that the `alias` property can be a string with one alias, or an array with 
 Here's how you use the `type-of-day` flag in your command:
 
 ```js
-function command (args, flags, context) {
+export function command (args, flags, context) {
   console.log(flags['type-of-day']) // logs `awesome`
 }
 
-const args = []
-const flags = [
+export const args = []
+export const flags = [
   {
     name: 'type-of-day',
     alias: ['d', 'day'],
@@ -199,7 +204,6 @@ const flags = [
     description: 'An arg example for saying what kind of day it is'
   }
 ]
-module.exports = { command, args, flags}
 ```
 
 ### Creating subcommands
@@ -255,7 +259,7 @@ Contributions are welcome! Please read the [contributing guidelines](CONTRIBUTIN
 
 It's important that this project contributes to a friendly, safe, and welcoming environment for all. Read this project's [code of conduct](CONDUCT.md)
 
-## Change log
+## Changelog
 
 Read about the changes to this project in [CHANGELOG.md](CHANGELOG.md). The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 

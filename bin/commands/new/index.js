@@ -1,23 +1,22 @@
-const fs = require('fs')
-const path = require('path')
-const mkdirp = require('mkdirp')
-const readTemplate = require('../../read-template')
+import { writeFile, mkdir } from 'fs/promises'
+import { join } from 'path'
+import readTemplate from '../../read-template.js'
 
-function command (args, flags, context) {
-  const binDirectory = path.join(args.cwd, 'bin')
-  const commandsDirectory = path.join(binDirectory, 'commands')
+async function command (args, flags, context) {
+  const binDirectory = join(args.cwd, 'bin')
+  const commandsDirectory = join(binDirectory, 'commands')
 
-  mkdirp.sync(binDirectory)
-  mkdirp.sync(commandsDirectory)
+  await mkdir(binDirectory)
+  await mkdir(commandsDirectory)
 
   const cliTemplate = readTemplate('cli.js')
-  const cliFilepath = path.join(binDirectory, 'index.js')
+  const cliFilepath = join(binDirectory, 'index.js')
 
   const cmdTemplate = readTemplate('command.js')
-  const cmdFilepath = path.join(commandsDirectory, 'index.js')
+  const cmdFilepath = join(commandsDirectory, 'index.js')
 
   const cmdExampleTemplate = readTemplate('example-command.js')
-  const cmdExampleFilepath = path.join(commandsDirectory, 'example.js')
+  const cmdExampleFilepath = join(commandsDirectory, 'example.js')
 
   const cliContent = cliTemplate({
     commandName: flags.name,
@@ -27,9 +26,9 @@ function command (args, flags, context) {
   const cmdContent = cmdTemplate()
   const cmdExampleContent = cmdExampleTemplate({ commandName: flags.name })
 
-  fs.writeFileSync(cliFilepath, cliContent)
-  fs.writeFileSync(cmdFilepath, cmdContent)
-  fs.writeFileSync(cmdExampleFilepath, cmdExampleContent)
+  await writeFile(cliFilepath, cliContent)
+  await writeFile(cmdFilepath, cmdContent)
+  await writeFile(cmdExampleFilepath, cmdExampleContent)
 }
 
 const args = [
@@ -58,10 +57,10 @@ const options = {
   description: 'Create a new cli tool',
   examples: [
     {
-      cmd: 'directory-command new . --name example-cli',
+      command: 'directory-command new . --name example-cli',
       description: 'Create a new cli tool in the current working directory'
     }
   ]
 }
 
-module.exports = { command, args, flags, options }
+export default { command, args, flags, options }

@@ -11,7 +11,7 @@ const flags = [
   }
 ]
 
-module.exports = {
+export default {
   command,
   args,
   flags

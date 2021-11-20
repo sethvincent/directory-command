@@ -5,4 +5,4 @@ function command (args, flags, context) {
 const args = []
 const flags = []
 
-module.exports = { command, args, flags }
+export default { command, args, flags }

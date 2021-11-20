@@ -1,5 +1,5 @@
 function command (args, flags, context) {
-
+  console.log('e a-longer-command', args, flags, context)
 }
 
 const args = [
@@ -22,4 +22,4 @@ const options = {
   description: 'I am an f.'
 }
 
-module.exports = { command, args, flags, options }
+export default { command, args, flags, options }

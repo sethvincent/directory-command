@@ -2,8 +2,8 @@
 
 ### Table of Contents
 
--   [directoryCommand][1]
-    -   [Parameters][2]
+*   [directoryCommand][1]
+    *   [Parameters][2]
 
 ## directoryCommand
 
@@ -11,24 +11,25 @@ Create a commandline router with nested commands based on a directory/file struc
 
 ### Parameters
 
--   `directory` **[string][3]** the directory with subdirectories and files that define the commands
--   `argsInput` **[array][4]** array of arguments, like process.argv.slice(2)
--   `config` **[object][5]** options object
-    -   `config.commandName` **[string][3]** base command name of the cli tool
-    -   `config.leftColumnWidth` **integer?** width in pixels of the left column of help text
-    -   `config.rightColumnWidth` **integer?** width in pixels of the right column of help text
-    -   `config.context` **[object][5]?** context object that will be passed to every command
--   `onError` **[function][6]?** optional callback function that is called if directoryCommand encounters an error
-    if onError is not provided, the error will be thrown
+*   `config` **[object][3]** options object
+
+    *   `config.directory` **[string][4]** the directory with subdirectories and files that define the commands
+    *   `config.argv` **[array][5]** array of arguments, like process.argv.slice(2)
+    *   `config.commandName` **[string][4]** base command name of the cli tool
+    *   `config.leftColumnWidth` **integer?** width in pixels of the left column of help text
+    *   `config.rightColumnWidth` **integer?** width in pixels of the right column of help text
+    *   `config.context` **[object][3]?** context object that will be passed to every command
+
+Returns **[Promise][6]** 
 
 [1]: #directorycommand
 
 [2]: #parameters
 
-[3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[4]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[4]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[5]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[5]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[6]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[6]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise

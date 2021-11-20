@@ -1,19 +1,17 @@
-const doesNotExist = require('./does-not-exist')
+import doesNotExist from './does-not-exist.js'
 
-module.exports = {
-  command: function (args, flags, context) {
-    console.log('huh', args, flags)
-  },
-  args: [
-    {
-      name: 'huh'
-    }
-  ],
-  flags: [
-    {
-      name: 'hi',
-      alias: ['h', 'hello'],
-      type: 'string'
-    }
-  ]
+export function command(args, flags, context) {
+  console.log('huh', args, flags)
 }
+export const args = [
+  {
+    name: 'huh'
+  }
+]
+export const flags = [
+  {
+    name: 'hi',
+    alias: ['h', 'hello'],
+    type: 'string'
+  }
+]

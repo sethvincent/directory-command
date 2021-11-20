@@ -7,6 +7,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## Unreleased
 - _nothing yet ..._
 
+## [v5.0.0] - 2021-11-20
+
+### Changed
+- Switch to ES modules
+- Node.js minimum supported version is now >=14.13.0
+- Changed `directoryCommand` arguments. See the [api docs](docs/api.md)
+
 ## [v4.3.0] - 2019-08-11
 ### Added
 - allow synchronous functions to values for arg & flag default values

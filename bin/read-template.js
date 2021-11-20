@@ -1,12 +1,13 @@
-const fs = require('fs')
-const path = require('path')
+import * as path from 'path'
+import { readFileSync } from 'fs'
+import { join } from 'desm'
 
-const handlebars = require('handlebars')
+import handlebars from 'handlebars'
 
-const templatesDirectory = path.join(__dirname, '..', 'templates')
+const templatesDirectory = join(import.meta.url, '..', 'templates')
 
-module.exports = function readtemplate (filename) {
+export default function readtemplate (filename) {
   const templateFilepath = path.join(templatesDirectory, filename)
-  const source = fs.readFileSync(templateFilepath, 'utf8')
+  const source = readFileSync(templateFilepath, 'utf8')
   return handlebars.compile(source)
 }

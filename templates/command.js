@@ -1,14 +1,37 @@
-function command (args, flags, context) {
+export async function command (args, flags, context) {
   console.log(args, flags, context)
 }
 
-const args = []
-const flags = []
+export const args = [
+  {
+    name: '<arg name>',
+    type: '<arg type>',
+    default: '<default value>',
+    help: '<arg help text>',
+    // required: true
+  }
+]
 
-const options = {
+export const flags = [
+  {
+    name: '<flag name>',
+    alias: '<flag alias>',
+    type: '<flag type>',
+    default: '<default value>',
+    help: '<flag help text>',
+    // required: true
+  }
+]
+
+export const options = {
   description: '',
   longDescription: '',
-  examples: []
+  help: '<more help text>',
+  examples: [
+    {
+      command: '<command usage example>',
+      description: '<decription of example>'
+    }
+  ],
+  docsUrl: ''
 }
-
-module.exports = { command, args, flags, options }

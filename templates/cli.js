@@ -1,13 +1,21 @@
 #! /usr/bin/env node
 
-const path = require('path')
-const directoryCommand = require('directory-command')
+import { dirname, join } from 'path'
+import { fileURLToPath } from 'url'
+import directoryCommand from 'directory-command'
 
-const directory = path.join(__dirname, '{{ commandsDirectory }}')
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const directory = join(__dirname, '{{ commandsDirectory }}')
 
-const options = {
+const config = {
   commandName: '{{ commandName }}',
+  directory,
+  argv: process.argv.slice(2),
   context: {}
 }
 
-directoryCommand(directory, process.argv.slice(2), options)
+try {
+  directoryCommand(config)
+} catch (err) {
+  console.error(err)
+}

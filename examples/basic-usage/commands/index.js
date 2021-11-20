@@ -1,5 +1,5 @@
 function command (args, flags, context) {
-
+  console.log('index', args, flags, context)
 }
 
 const args = [
@@ -36,14 +36,14 @@ const options = {
   longDescription: 'This is a long description that describes in more detail what the command does. It can be as long as you want, really, it\'s ok to get wild with this one, it\'ll be wrapped automatically at 80 characters so you don\'t have to worry about it.',
   examples: [
     {
-      cmd: 'example',
+      command: 'example',
       description: 'Just run it by itself!'
     },
     {
-      cmd: 'example -c',
+      command: 'example -c',
       description: 'This has a long description that maybe should be shorter but hey it is long what can you do'
     }
   ]
 }
 
-module.exports = { command, args, flags, options }
+export default { command, args, flags, options }

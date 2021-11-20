@@ -1,27 +1,23 @@
-const path = require('path')
-const walker = require('folder-walker')
-const ArgsAndFlags = require('args-and-flags')
-const keypath = require('obj-keypath')
-const wordWrap = require('word-wrap')
-const through = require('through2')
-const wrap = require('wrap-ansi')
-const pump = require('pump')
+import * as fs from 'fs/promises'
+import * as path from 'path'
+
+import ArgsAndFlags from 'args-and-flags'
+import wrap from 'wrap-ansi'
 
 /**
 * Create a commandline router with nested commands based on a directory/file structure
 *
 * @name directoryCommand
-* @param {string} directory - the directory with subdirectories and files that define the commands
-* @param {array} argsInput - array of arguments, like process.argv.slice(2)
 * @param {object} config - options object
+* @param {string} config.directory - the directory with subdirectories and files that define the commands
+* @param {array} config.argv - array of arguments, like process.argv.slice(2)
 * @param {string} config.commandName - base command name of the cli tool
 * @param {integer} [config.leftColumnWidth] - width in pixels of the left column of help text
 * @param {integer} [config.rightColumnWidth] - width in pixels of the right column of help text
 * @param {object} [config.context] - context object that will be passed to every command
-* @param {function} [onError] - optional callback function that is called if directoryCommand encounters an error
-* if onError is not provided, the error will be thrown
+* @return {Promise}
 */
-module.exports = function directoryCommand (directory, argsInput, config, onError) {
+export default async function directoryCommand (config) {
   if (!config) {
     throw new Error('config object is required as the 3rd argument')
   }
@@ -30,226 +26,208 @@ module.exports = function directoryCommand (directory, argsInput, config, onErro
     throw new Error('config.commandName string is required')
   }
 
-  const context = config.context || {}
-  const commandName = config.commandName
-  const leftColumnWidth = config.leftColumnWidth || 40
-  const rightColumnWidth = config.rightColumnWidth || 40
-  const commands = {}
+  config.leftColumnWidth = config.leftColumnWidth || process.stdout.columns / 2
+  config.rightColumnWidth = config.rightColumnWidth || process.stdout.columns / 2
 
-  if (config.autoHelp !== false) {
-    config.autoHelp = true
-  }
+  return runCommand(config)
+}
 
-  function match (args, unmatchedArgs) {
-    if (!unmatchedArgs) unmatchedArgs = []
+async function runCommand (config) {
+	const { directory, argv, context = {} } = config
 
-    if (!args.length) {
-      const cmd = commands.cmd
-      delete commands.cmd
-      return runCommand(cmd, unmatchedArgs, commands)
-    }
+	const commands = await importCommands(directory)
+	const command = findCommand(argv, commands)
 
-    const subcommands = keypath.get(commands, argsInput)
+	if (!command) {
+		render(`${argv.join(' ')} command not found`)
+	}
 
-    if (subcommands) {
-      const cmd = subcommands.cmd
-      delete subcommands.cmd
+	const { args, flags } = command.parser.parse(command.unusedArgs)
 
-      return runCommand(cmd, unmatchedArgs, subcommands)
-    }
+	if (flags.help) {
+		return renderHelp(command, config)
+	}
 
-    unmatchedArgs.unshift(args.pop())
-    return match(args, unmatchedArgs)
-  }
+	return command.command(args, flags, context)
+}
 
-  function runCommand (commandObject, argsInput, subcommands) {
-    const { command, parser, help } = commandObject
+async function importCommands (commandsDirectory, config = {}) {
+	const { argumentParser = {} } = config
+	const commands = {}
 
-    if (argsInput.includes('--help') || argsInput.includes('-h')) {
-      return renderHelp(commandObject, subcommands)
-    }
+	async function onFile (file) {
+		const { filepath } = file
 
-    const { args, flags } = parser.parse(argsInput)
+		if (file.ext !== '.js') {
+			return
+		}
 
-    if (config.autoHelp && flags.help) {
-      return renderHelp(commandObject, subcommands)
-    }
+		let commandString = filepath
+			.replace(commandsDirectory, '')
+			.replace('.js', '')
+			.replace('/index', '')
+			.replace(/^\//, '')
+			.split(path.sep)
+			.join('_')
 
-    context.help = function () {
-      renderHelp(commandObject, subcommands)
-    }
+		const moduleImport = await import(filepath)
 
-    return command(args, flags, Object.assign({ help }, context))
-  }
+		if (moduleImport.default) {
+			commands[commandString] = Object.assign(file, moduleImport.default)
+		} else {
+			commands[commandString] = Object.assign(file, moduleImport)
+		}
 
-  function logName (rootName, cmd) {
-    if (cmd && cmd.name && cmd.name.length) {
-      return `${rootName} ${cmd.name}`
-    }
+		commands[commandString].parser = new ArgsAndFlags(Object.assign(argumentParser, commands[commandString]))
+	}
 
-    return rootName
-  }
+	await walkDirectory(commandsDirectory, onFile)
+	return commands
+}
 
-  function renderHelp (commandObject, subcommands) {
-    const { help, longDescription, description, docsUrl } = commandObject
+async function walkDirectory (filepath, onFile) {
+	const stats = await fs.stat(filepath)
+	const parsedPath = path.parse(filepath)
 
-    console.log(logName(commandName, commandObject), '\n')
+	if (stats.isDirectory()) {
+		const filepaths = await fs.readdir(filepath)
 
-    if (description) {
-      console.log(description, '\n')
-    }
+		const recurse = await filepaths.map((filename) => {
+			return walkDirectory(path.join(filepath, filename), onFile)
+		})
 
-    if (longDescription) {
-      console.log(wrap(longDescription, 80), '\n')
-    }
+		await Promise.all(recurse)
+	} else {
+		await onFile(Object.assign(parsedPath, { filepath, stats }))
+	}
+}
 
-    console.log('Usage:')
-    renderUsage(commandName, commandObject)
+function findCommand (args, commands, unusedArgs = []) {
+	const commandArgs = [...args]
+	let commandString = commandArgs.join('_')
 
-    if (help.trim().length) {
-      console.log(help)
-    }
+	if (commands[commandString]) {
+		commands[commandString].name = commandArgs.join(' ')
+		commands[commandString].subcommands = findSubcommands(commandString, commands)
+		commands[commandString].unusedArgs = unusedArgs
+		return commands[commandString]
+	} else {
+		const arg = commandArgs.pop()
+		unusedArgs.unshift(arg)
 
-    if (commandObject.examples && commandObject.examples.length) {
-      console.log('\nExamples:')
-      commandObject.examples.forEach((example) => {
-        const line = `  ${example.cmd}`
-        const description = logDescription(example.description)
-        console.log(`${line}${logSpaces(line.length)}${description}`)
-      })
-    }
+		if (!commandArgs.length) {
+      // root command key is an empty string
+			return commands['']
+		}
 
-    const subcommandKeys = Object.keys(subcommands)
-    if (subcommands && subcommandKeys.length) {
-      console.log('\nSubcommands:')
-      subcommandKeys.sort((a, b) => {
-        return subcommands[a].cmd.name > subcommands[b].cmd.name
-      }).forEach((key) => {
-        const subcmd = subcommands[key]
-        const cmd = subcmd.cmd
-        delete subcmd.cmd
+		return findCommand(commandArgs, commands, unusedArgs)
+	}
+}
 
-        renderUsage(commandName, cmd, subcmd)
-      })
+function findSubcommands (commandString, commands) {
+	const subcommands = {}
 
-      console.log('\nSee help for subcommands:')
-      console.log(`  ${logName(commandName, commandObject)} [command] --help\n`)
-    }
+	for (const key of Object.keys(commands)) {
+		if (commandString !== key && key.includes(commandString)) {
+			subcommands[key] = commands[key]
+			subcommands[key].parentCommandName = commandString.replace('_', ' ')
+		}
+	}
 
-    if (docsUrl) {
-      console.log('More documentation:')
-      console.log(docsUrl, '\n')
-    }
-  }
+	return subcommands
+}
 
-  function logDescription (text) {
-    if (!text) return ''
-    if (text.length > rightColumnWidth) {
-      const lines = wordWrap(text, { width: rightColumnWidth }).split(/\r?\n/).map((line, i) => {
-        if (i === 0) return line.trim()
-        return ' '.repeat(leftColumnWidth) + line.trim()
-      })
-      return lines.join('\n')
-    }
-    return text
-  }
+function renderHelp (commandDefinition, config) {
+	const { options = {}, parser, subcommands } = commandDefinition
 
-  function logSpaces (lineLength) {
-    const padding = leftColumnWidth - lineLength
-    return ' '.repeat(padding)
-  }
+	if (options.description) {
+		render(options.description, '\n')
+	}
 
-  function renderUsage (rootName, cmd, subcommands) {
-    const subcommandKeys = Object.keys(subcommands || {})
+	if (options.longDescription) {
+		render(wrap(options.longDescription, 80), '\n')
+	}
 
-    function logCommands () {
-      if (!subcommandKeys.length) return ''
-      return ' [command]'
-    }
+	render('Usage:')
+	renderUsage(config, commandDefinition)
 
-    const line = `  ${logName(rootName, cmd)}${logCommands()}`
-    const description = cmd && cmd.description ? logDescription(cmd.description) : ''
-    console.log(`${line}${logSpaces(line.length)}${description}`)
+	if (options.help && options.help.trim().length) {
+		render(options.help)
+	}
 
-    if (!subcommands || !subcommandKeys.length) return
+	if (options.examples && options.examples.length) {
+		render('\nExamples:')
+		options.examples.forEach((example) => {
+			const line = `  ${example.command}`
+			const description = parser.formatDescription(example.description)
+			render(`${line}${formatSpaces(line.length, config.leftColumnWidth)}${description}`)
+		})
+	}
 
-    subcommandKeys.sort((a, b) => {
-      return subcommands[a].cmd.name > subcommands[b].cmd.name
-    }).forEach((key) => {
-      const subcmd = subcommands[key]
-      const cmd = subcmd.cmd
-      delete subcmd.cmd
+	if (subcommands) {
+		const subcommandKeys = Object.keys(subcommands)
+		if (subcommandKeys.length) {
+			render('\nSubcommands:')
+			subcommandKeys.sort((a, b) => {
+				return subcommands[a].name > subcommands[b].name
+			}).forEach((key) => {
+				const subcmd = subcommands[key]
+				renderUsage(config, subcmd)
+			})
 
-      renderUsage(rootName, cmd, subcmd)
-    })
-  }
+			render('\nSee help for subcommands:')
+			render(`  ${formatName(config.commandName, commandDefinition)} [command] --help\n`)
+		}
+	}
 
-  function each (data, enc, next) {
-    // TODO: consider supporting other file types
-    if (data.type === 'file' && path.extname(data.relname) !== '.js') return next()
+	if (options.docsUrl) {
+		render('More documentation:')
+		render(options.docsUrl, '\n')
+	}
+}
 
-    const commandParts = data.relname.split('/')
-    const finalCommand = commandParts.length - 1
-    commandParts[finalCommand] = commandParts[finalCommand].split('.')[0]
+function formatName (commandName, cmd) {
+	if (cmd && cmd.name && cmd.name.length) {
+		if (cmd.parentCommandName) {
+			return `${commandName} ${cmd.parentCommandName} ${cmd.name}`
+		}
 
-    if (commandParts[finalCommand] === 'index') {
-      commandParts.pop()
-    }
+		return `${commandName} ${cmd.name}`
+	}
 
-    const command = {
-      cmd: {}
-    }
+	return commandName
+}
 
-    try {
-      command.cmd = require(data.filepath)
-    } catch (err) {
-      const filepathBasename = path.basename(data.filepath)
+function formatSpaces (lineLength, leftColumnWidth) {
+	const padding = leftColumnWidth - lineLength
+	return ' '.repeat(padding)
+}
 
-      if (err && filepathBasename !== commandParts[finalCommand]) {
-        return next(err)
-      } else {
-        command.cmd.name = commandParts.join(' ')
-        keypath.set(commands, commandParts, command)
-        return next()
-      }
-    }
+function renderUsage (config, commandDefinition) {
+	const { parser , subcommands, options = {} } = commandDefinition
+	const { commandName, leftColumnWidth } = config
 
-    const options = command.cmd.options || {}
-    command.cmd.parser = new ArgsAndFlags(command.cmd)
-    command.cmd.help = command.cmd.parser.help({
-      argsHeaderText: 'Args:',
-      flagsHeaderText: 'Flags:',
-      leftColumnWidth,
-      rightColumnWidth
-    })
+	const subcommandKeys = Object.keys(subcommands || {})
 
-    command.cmd.name = commandParts.join(' ')
-    command.cmd.description = options.description
-    command.cmd.longDescription = options.longDescription
-    command.cmd.examples = options.examples
-    command.cmd.docsUrl = options.docsUrl
+	function formatCommandName () {
+		if (!subcommandKeys.length) return ''
+		return ' [command]'
+	}
 
-    if (data.type === 'directory') {
-      keypath.set(commands, commandParts, command)
-    } else if (data.type === 'file') {
-      if (!commandParts.length) {
-        keypath.set(commands, 'cmd', command.cmd)
-      } else {
-        keypath.set(commands, commandParts, command)
-      }
-    }
+	const line = `  ${formatName(commandName, commandDefinition)}${formatCommandName()}`
+	const description = options.description ? parser.formatDescription(options.description) : ''
+	render(`${line}${formatSpaces(line.length, leftColumnWidth)}${description}`)
 
-    next()
-  }
+	if (!subcommands || !subcommandKeys.length) return
 
-  function end () {
-    match(argsInput)
-  }
+	subcommandKeys.sort((a, b) => {
+		return subcommands[a].name > subcommands[b].name
+	}).forEach((key) => {
+		const subcommand = subcommands[key]
+		renderUsage(config, subcommand)
+	})
+}
 
-  pump(walker(directory), through.obj(each, end), (err) => {
-    if (err) {
-      if (onError) return onError(err)
-      throw err
-    }
-  })
+function render () {
+	console.log(...arguments)
 }

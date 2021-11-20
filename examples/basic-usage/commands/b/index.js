@@ -24,14 +24,14 @@ const options = {
   docsUrl: 'http://examplecli.com/b',
   examples: [
     {
-      cmd: 'example b 1',
+      command: 'example b 1',
       description: 'set  `int` argument to 1'
     },
     {
-      cmd: 'example b --string hi',
+      command: 'example b --string hi',
       description: 'set  `--string` flag to `hi`'
     }
   ]
 }
 
-module.exports = { command, args, flags, options }
+export default { command, args, flags, options }

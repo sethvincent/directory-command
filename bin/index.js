@@ -1,15 +1,21 @@
 #! /usr/bin/env node
 
-const path = require('path')
-const directoryCommand = require('../index')
+import { join } from 'desm'
+import directoryCommand from '../index.js'
 
-const directory = path.join(__dirname, 'commands')
+const directory = join(import.meta.url, 'commands')
 
-const options = {
+const config = {
   commandName: 'directory-command',
+  directory,
+  argv: process.argv.slice(2),
   leftColumnWidth: 50,
   rightColumnWidth: 30,
   context: {}
 }
 
-directoryCommand(directory, process.argv.slice(2), options)
+try {
+  directoryCommand(config)
+} catch (err) {
+  console.error(err)
+}

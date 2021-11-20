@@ -1,12 +1,10 @@
-module.exports = {
-  command: function (args, flags, context) {
-    context.t.ok(flags.hi === 'huh')
-  },
-  args: [],
-  flags: [
-    {
-      name: 'hi',
-      type: 'string'
-    }
-  ]
+export function command(args, flags, context) {
+  context.t.ok(flags.hi === 'huh')
 }
+export const args = []
+export const flags = [
+  {
+    name: 'hi',
+    type: 'string'
+  }
+]

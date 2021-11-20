@@ -1,10 +1,10 @@
-function command (args, flags, context) {
+export async function command (args, flags, context) {
   const { message } = args
   const { excited } = flags
   console.log(`${message}${excited ? '!' : ''}`)
 }
 
-const args = [
+export const args = [
   {
     name: 'message',
     type: 'string',
@@ -12,7 +12,7 @@ const args = [
   }
 ]
 
-const flags = [
+export const flags = [
   {
     name: 'excited',
     alias: 'e',
@@ -21,15 +21,15 @@ const flags = [
   }
 ]
 
-const options = {
+export const options = {
   description: 'An example command',
   longDescription: 'This command demonstrates some of the basic features of directory-command',
+  help: 'Example help text',
   examples: [
     {
-      cmd: '{{ commandName }} example "helloooo --excited"',
+      command: '{{ commandName }} example "helloooo --excited"',
       description: '!'
-    },
-  ]
+    }
+  ],
+  docsUrl: 'https://example.com'
 }
-
-module.exports = { command, args, flags, options }

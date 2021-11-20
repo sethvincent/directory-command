@@ -1,13 +1,17 @@
 #! /usr/bin/env node
 
-const path = require('path')
-const directoryCommand = require('../../index')
+import { join } from 'desm'
+import directoryCommand from '../../index.js'
 
-const directory = path.join(__dirname, 'commands')
+const directory = join(import.meta.url, 'commands')
 
-const options = {
-  commandName: 'example',
-  context: {}
+try {
+  await directoryCommand({
+    commandName: 'example',
+    context: {},
+    directory,
+    argv: process.argv.slice(2)
+  })  
+} catch (err) {
+  console.log(err)
 }
-
-directoryCommand(directory, process.argv.slice(2), options)

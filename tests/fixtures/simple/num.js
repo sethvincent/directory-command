@@ -1,6 +1,6 @@
 function command (args, flags, context) {
-  context.t.ok(flags.num === 1.1)
-  context.t.ok(args.num === 1.1)
+  context.t.ok(!isNaN(flags.num))
+  context.t.ok(!isNaN(args.num))
 }
 
 const args = [
@@ -17,7 +17,7 @@ const flags = [
   }
 ]
 
-module.exports = {
+export default {
   command,
   args,
   flags
